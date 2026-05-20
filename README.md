@@ -44,7 +44,8 @@
 - Меню темы: `menu-1`, `footer-menu-about`, `footer-menu-education`
 - Таксономия `course_specialization` — блок тегов на главной (регистрация вне этого репозитория)
 - Мета событий: префикс `_edu_event_*`; связь курс ↔ события — `_course_event_ids`, `_related_course_id`
-- Модальное окно CF7: ID формы в Customizer → **Модалка «Записаться на курс»** (`edu_center_cf7_enroll_form_id`, опционально `edu_center_cf7_enroll_form_title`); вывод в `template-parts/modal-course-enroll.php`
+- Customizer → **Главная страница**: рубрика новостей (`edu_center_news_category_id`), страница «Все отзывы» (`edu_center_testimonials_page_id`)
+- Модальное окно CF7: Customizer → **Модалка «Записаться на курс»** — выбор формы из списка (`edu_center_cf7_enroll_form_id`), опционально `edu_center_cf7_enroll_form_title`; `template-parts/modal-course-enroll.php`
 
 ## Структура каталогов
 

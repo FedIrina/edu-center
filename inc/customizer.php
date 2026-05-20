@@ -194,10 +194,56 @@ function edu_center_customize_register( WP_Customize_Manager $wp_customize ): vo
 	);
 
 	$wp_customize->add_section(
+		'edu_center_front_page_section',
+		array(
+			'title'    => esc_html__( 'Главная страница', 'edu-center' ),
+			'priority' => 28,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'edu_center_news_category_id',
+		array(
+			'default'           => 0,
+			'sanitize_callback' => 'absint',
+			'transport'         => 'refresh',
+		)
+	);
+
+	$wp_customize->add_control(
+		'edu_center_news_category_id',
+		array(
+			'label'       => esc_html__( 'Рубрика «Новости»', 'edu-center' ),
+			'description' => esc_html__( 'Записи этой рубрики выводятся в блоке новостей на главной.', 'edu-center' ),
+			'section'     => 'edu_center_front_page_section',
+			'type'        => 'dropdown-categories',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'edu_center_testimonials_page_id',
+		array(
+			'default'           => 0,
+			'sanitize_callback' => 'absint',
+			'transport'         => 'refresh',
+		)
+	);
+
+	$wp_customize->add_control(
+		'edu_center_testimonials_page_id',
+		array(
+			'label'       => esc_html__( 'Страница «Все отзывы»', 'edu-center' ),
+			'description' => esc_html__( 'Ссылка «все Отзывы» в блоке отзывов на главной.', 'edu-center' ),
+			'section'     => 'edu_center_front_page_section',
+			'type'        => 'dropdown-pages',
+		)
+	);
+
+	$wp_customize->add_section(
 		'edu_center_enroll_modal_section',
 		array(
 			'title'       => esc_html__( 'Модалка «Записаться на курс»', 'edu-center' ),
-			'description' => esc_html__( 'Форма Contact Form 7 в модальном окне (ID из админки CF7 → форма → шорткод).', 'edu-center' ),
+			'description' => esc_html__( 'Форма Contact Form 7 в модальном окне записи на курс.', 'edu-center' ),
 			'priority'    => 32,
 		)
 	);
@@ -206,21 +252,23 @@ function edu_center_customize_register( WP_Customize_Manager $wp_customize ): vo
 		'edu_center_cf7_enroll_form_id',
 		array(
 			'default'           => '',
-			'sanitize_callback' => 'edu_center_sanitize_cf7_form_ref',
+			'sanitize_callback' => 'edu_center_sanitize_cf7_enroll_form_choice',
 			'transport'         => 'refresh',
 		)
 	);
 
+	$cf7_form_choices = edu_center_get_cf7_form_choices();
+
 	$wp_customize->add_control(
 		'edu_center_cf7_enroll_form_id',
 		array(
-			'label'       => esc_html__( 'ID формы CF7', 'edu-center' ),
-			'description' => esc_html__( 'Значение id из шорткода формы, например c41705b или числовой ID поста формы.', 'edu-center' ),
+			'label'       => esc_html__( 'Форма CF7', 'edu-center' ),
+			'description' => count( $cf7_form_choices ) > 1
+				? esc_html__( 'Опубликованные формы Contact Form 7 (id как в шорткоде плагина).', 'edu-center' )
+				: esc_html__( 'Нет опубликованных форм Contact Form 7 — список пуст.', 'edu-center' ),
 			'section'     => 'edu_center_enroll_modal_section',
-			'type'        => 'text',
-			'input_attrs' => array(
-				'placeholder' => 'c41705b',
-			),
+			'type'        => 'select',
+			'choices'     => $cf7_form_choices,
 		)
 	);
 

@@ -1062,30 +1062,22 @@ get_header();
 	<?php endif; ?>
 
 	<?php
-	// Получаем записи из категории "Новости"
-	// Подбираем рубрику по возможным slug (на сайте может быть novosti-uchebnogo-czentra и т.п.)
-	$news_category       = false;
-	$news_category_slug  = 'news';
-	$news_category_slugs = array( 'news', 'novosti', 'novosti-uchebnogo-czentra' );
-	foreach ( $news_category_slugs as $slug ) {
-		$news_category = get_category_by_slug( $slug );
-		if ( $news_category ) {
-			$news_category_slug = $slug;
-			break;
-		}
-	}
-	
-	$news_query = new WP_Query(
-		array(
-			'post_type'      => 'post',
-			'category_name'  => $news_category_slug,
-			'posts_per_page' => 4, // Выводим 4 новости
-			'orderby'         => 'date',
-			'order'           => 'DESC', // Обратный хронологический порядок
-		)
-	);
+	$news_category = function_exists( 'edu_center_get_news_category' ) ? edu_center_get_news_category() : null;
+	$news_query    = null;
 
-	if ( $news_query->have_posts() ) :
+	if ( $news_category ) {
+		$news_query = new WP_Query(
+			array(
+				'post_type'      => 'post',
+				'cat'            => (int) $news_category->term_id,
+				'posts_per_page' => 4,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+	}
+
+	if ( $news_query && $news_query->have_posts() ) :
 		?>
 	<section class="section news">
 		<div class="news__container container">
@@ -1150,13 +1142,6 @@ get_header();
 
 				<div class="swiper__button-controls news__button-controls">
 					<?php
-					// Получаем ссылку на страницу архива категории "Новости"
-					if ( ! isset( $news_category ) ) {
-						$news_category = get_category_by_slug( 'news' );
-						if ( ! $news_category ) {
-							$news_category = get_category_by_slug( 'novosti' );
-						}
-					}
 					$news_archive_link = $news_category ? get_category_link( $news_category->term_id ) : '#';
 					?>
 					<a href="<?php echo esc_url( $news_archive_link ); ?>" class="news__link-all news__link-all--mobile"><?php echo esc_html__( 'все Новости', 'edu-center' ); ?></a>

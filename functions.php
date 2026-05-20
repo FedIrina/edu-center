@@ -51,6 +51,61 @@ function edu_center_sanitize_cf7_form_ref( string $value ): string {
 }
 
 /**
+ * Варианты форм CF7 для Customizer (ключ — id в shortcode, значение — подпись).
+ *
+ * @return array<string, string>
+ */
+function edu_center_get_cf7_form_choices(): array {
+	$choices = array(
+		'' => __( '— Не выбрано —', 'edu-center' ),
+	);
+
+	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
+		return $choices;
+	}
+
+	$forms = WPCF7_ContactForm::find(
+		array(
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		)
+	);
+
+	foreach ( $forms as $form ) {
+		if ( ! $form instanceof WPCF7_ContactForm ) {
+			continue;
+		}
+		$hash = $form->hash();
+		if ( $hash === '' ) {
+			continue;
+		}
+		$choices[ $hash ] = sprintf(
+			'%s (%s)',
+			$form->title(),
+			$hash
+		);
+	}
+
+	return $choices;
+}
+
+/**
+ * ID формы CF7 из Customizer: только значение из списка опубликованных форм.
+ */
+function edu_center_sanitize_cf7_enroll_form_choice( string $value ): string {
+	$value   = edu_center_sanitize_cf7_form_ref( $value );
+	$choices = edu_center_get_cf7_form_choices();
+
+	if ( $value === '' || isset( $choices[ $value ] ) ) {
+		return $value;
+	}
+
+	return '';
+}
+
+/**
  * Shortcode CF7 модалки «Записаться на курс» из Customizer. Пустая строка — форма не выводится.
  */
 function edu_center_get_cf7_enroll_form_shortcode(): string {
@@ -69,6 +124,23 @@ function edu_center_get_cf7_enroll_form_shortcode(): string {
 		esc_attr( $form_id ),
 		esc_attr( $title )
 	);
+}
+
+/**
+ * Рубрика новостей для блока на главной (Customizer: edu_center_news_category_id).
+ */
+function edu_center_get_news_category(): ?WP_Term {
+	$term_id = (int) get_theme_mod( 'edu_center_news_category_id', 0 );
+	if ( $term_id <= 0 ) {
+		return null;
+	}
+
+	$term = get_category( $term_id );
+	if ( ! $term instanceof WP_Term || is_wp_error( $term ) ) {
+		return null;
+	}
+
+	return $term;
 }
 
 /**

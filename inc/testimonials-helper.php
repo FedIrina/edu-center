@@ -6,7 +6,7 @@
  */
 
 /**
- * URL опубликованной страницы с шаблоном «Отзывы».
+ * URL страницы «Все отзывы» из Customizer (edu_center_testimonials_page_id).
  *
  * @return string Permalink или пустая строка.
  */
@@ -19,24 +19,10 @@ function edu_center_get_testimonials_page_url(): string {
 	}
 
 	$did_lookup = true;
-	$page_ids   = get_posts(
-		array(
-			'post_type'              => 'page',
-			'post_status'            => 'publish',
-			'posts_per_page'         => 1,
-			'orderby'                => 'menu_order',
-			'order'                  => 'ASC',
-			'meta_key'               => '_wp_page_template',
-			'meta_value'             => 'page-testimonials.php',
-			'fields'                 => 'ids',
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
-		)
-	);
+	$page_id    = (int) get_theme_mod( 'edu_center_testimonials_page_id', 0 );
 
-	if ( ! empty( $page_ids ) ) {
-		$permalink = get_permalink( $page_ids[0] );
+	if ( $page_id > 0 && get_post_status( $page_id ) === 'publish' ) {
+		$permalink = get_permalink( $page_id );
 		if ( is_string( $permalink ) ) {
 			$url = $permalink;
 		}
