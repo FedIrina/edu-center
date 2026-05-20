@@ -19,15 +19,20 @@
 
 ## Состав фрагмента
 
-- `front-page.php` — слайдер, преимущества, теги специализаций, карусели курсов (ближайшие / новые / «горящие»), отзывы, клиенты, партнёры
-- `header.php` / `footer.php` — меню, логотип, контакты из Customizer
+- `front-page.php` — слайдер, преимущества, теги специализаций, карусели курсов (ближайшие / новые / «горящие»), отзывы (комментарии с мета `_review_*`), новости, клиенты, партнёры
+- `header.php` / `footer.php` — меню, логотип, контакты и ссылки из Customizer
+- `index.php` — минимальный fallback, если главная не назначена статической страницей
+- `inc/customizer.php` — секции и поля настроек темы
+- `inc/dependencies.php` — ожидаемые плагины и admin notices (без блокировки сайта)
 - `inc/events-functions.php` — Events Manager, связь с LearnPress, мета `_edu_event_*`, метабокс и AJAX для групп
 - `inc/cf7-calendar.php` — тег CF7 `[calendar]`, AJAX дат для модалки (Flatpickr из Events Manager)
-- `inc/dependencies.php` — список ожидаемых плагинов и admin notices (без блокировки сайта)
+- `inc/testimonials-helper.php` — URL страницы отзывов из Customizer
+- `template-parts/course-card-carousel.php` — карточка курса в каруселях
+- `template-parts/modal-course-enroll.php` — модалка с формой CF7
 
 ## Предполагаемая среда
 
-Фрагмент писался под конкретный проект, где уже были активны:
+Фрагмент взят из конкретного проект. Для работы проекта и фрагмента нужны:
 
 | Плагин | Роль в этом коде |
 |--------|------------------|
@@ -42,17 +47,30 @@
 
 - ACF на главной: `slider_repeater`, `advantages_repeater`, `upcoming_courses_*`, `new_courses_*`, `hot_courses_count`, галереи клиентов и партнёров
 - Меню темы: `menu-1`, `footer-menu-about`, `footer-menu-education`
-- Таксономия `course_specialization` — блок тегов на главной (регистрация вне этого репозитория)
+- Таксономия `course_specialization` — блок ссылок на главной (регистрация вне репозитория)
+- Таксономия `course_tag`, термин «Новинка» — блок новых курсов; `event-tags`, термин «Горящий» — блок горящих курсов
 - Мета событий: префикс `_edu_event_*`; связь курс ↔ события — `_course_event_ids`, `_related_course_id`
-- Customizer → **Главная страница**: рубрика новостей (`edu_center_news_category_id`), страница «Все отзывы» (`edu_center_testimonials_page_id`)
-- Модальное окно CF7: Customizer → **Модалка «Записаться на курс»** — выбор формы из списка (`edu_center_cf7_enroll_form_id`), опционально `edu_center_cf7_enroll_form_title`; `template-parts/modal-course-enroll.php`
+
+### Настройки в Customizer
+
+Путь в админке: **Внешний вид → Настроить**. Секции темы (собственные, не путать с полями ACF на странице главной):
+
+| Секция | Поля (тип контрола) | Назначение |
+|--------|---------------------|------------|
+| **Идентичность сайта** | второй логотип (медиа), слоган (текст) | шапка / слоган |
+| **Главная страница** | рубрика «Новости» (`dropdown-categories`), страница «Все отзывы» (`dropdown-pages`) | блок новостей, ссылка «все Отзывы» |
+| **Футер** | телефон, email, адрес, Telegram, страница политики (`dropdown-pages`) | подвал |
+| **Модалка «Записаться на курс»** | форма CF7 (`select` из опубликованных форм), title в shortcode (текст, необязательно) | `template-parts/modal-course-enroll.php` |
+| **Страница «Преподаватели»** | страница для блока «Дополнительная информация» (`dropdown-pages`) | вне этого фрагмента шаблонов; настройка от полной темы |
+
+Ключи `theme_mod`: `edu_center_news_category_id`, `edu_center_testimonials_page_id`, `edu_center_cf7_enroll_form_id`, `edu_center_cf7_enroll_form_title`. Список форм CF7 строится в `edu_center_get_cf7_form_choices()` (hash формы, как в shortcode плагина).
 
 ## Структура каталогов
 
 ```
 edu-center/
 ├── style.css
-├── functions.php
+├── functions.php          # setup, enqueue, хелперы CF7/новостей/телефона
 ├── front-page.php
 ├── header.php / footer.php
 ├── index.php
@@ -61,7 +79,14 @@ edu-center/
 ├── fonts/
 ├── img/
 ├── inc/
+│   ├── customizer.php
+│   ├── dependencies.php
+│   ├── events-functions.php
+│   ├── cf7-calendar.php
+│   └── testimonials-helper.php
 ├── template-parts/
+│   ├── course-card-carousel.php
+│   └── modal-course-enroll.php
 └── languages/
 ```
 
@@ -90,10 +115,11 @@ define( 'EDU_MODAL_DATEPICKER_ENGINE', 'flatpickr' );
 | JS | `eduSwipers`, `eduCourseDatesAjax`, `eduReinitModalDatepicker` |
 | мета событий | `_edu_event_*` |
 
-## Ограничения репозитория
+## Ограничения фрагмента
 
 - Нет каталога курсов, шаблонов LearnPress single/archive, страницы расписания Events Manager и прочих разделов полной темы
 - Интеграционная логика в `inc/events-functions.php` и `inc/cf7-calendar.php` — вырезка под главную и модалку, а не самостоятельный плагин
+- Блок новостей и ссылки отзывов на главной без выбора в Customizer не выводятся (рубрика/страница не заданы)
 
 ## Автор
 
