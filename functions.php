@@ -37,6 +37,41 @@ function edu_center_normalize_tel_uri( string $phone ): string {
 }
 
 /**
+ * ID или hash формы CF7 для модалки (атрибут shortcode id="…").
+ */
+function edu_center_sanitize_cf7_form_ref( string $value ): string {
+	$value = trim( sanitize_text_field( $value ) );
+	if ( $value === '' ) {
+		return '';
+	}
+	if ( ctype_digit( $value ) ) {
+		return $value;
+	}
+	return preg_replace( '/[^a-z0-9]/', '', strtolower( $value ) );
+}
+
+/**
+ * Shortcode CF7 модалки «Записаться на курс» из Customizer. Пустая строка — форма не выводится.
+ */
+function edu_center_get_cf7_enroll_form_shortcode(): string {
+	$form_id = edu_center_sanitize_cf7_form_ref( (string) get_theme_mod( 'edu_center_cf7_enroll_form_id', '' ) );
+	if ( $form_id === '' ) {
+		return '';
+	}
+
+	$title = trim( (string) get_theme_mod( 'edu_center_cf7_enroll_form_title', '' ) );
+	if ( $title === '' ) {
+		$title = __( 'Записаться на курс', 'edu-center' );
+	}
+
+	return sprintf(
+		'[contact-form-7 id="%s" title="%s" html_class="course-enroll-form"]',
+		esc_attr( $form_id ),
+		esc_attr( $title )
+	);
+}
+
+/**
  * Настройки темы для шапки, подвала и главной.
  */
 function edu_center_setup(): void {

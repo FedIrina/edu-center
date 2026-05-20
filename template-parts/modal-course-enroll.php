@@ -17,7 +17,12 @@ defined( 'ABSPATH' ) || exit;
       </div>
       <div class="modal-body">
         <h2 class="modal-title" id="course-enroll-modal-label"><?php esc_html_e( 'Записаться на курс', 'edu-center' ); ?></h2>
-        <?php echo do_shortcode( '[contact-form-7 id="c41705b" title="Записаться на курс" html_class="course-enroll-form"]' ); ?>
+        <?php
+        $edu_cf7_enroll_shortcode = edu_center_get_cf7_enroll_form_shortcode();
+        if ( $edu_cf7_enroll_shortcode !== '' && function_exists( 'wpcf7' ) ) {
+            echo do_shortcode( $edu_cf7_enroll_shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        }
+        ?>
       </div>
     </div>
   </div>

@@ -193,6 +193,56 @@ function edu_center_customize_register( WP_Customize_Manager $wp_customize ): vo
 		)
 	);
 
+	$wp_customize->add_section(
+		'edu_center_enroll_modal_section',
+		array(
+			'title'       => esc_html__( 'Модалка «Записаться на курс»', 'edu-center' ),
+			'description' => esc_html__( 'Форма Contact Form 7 в модальном окне (ID из админки CF7 → форма → шорткод).', 'edu-center' ),
+			'priority'    => 32,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'edu_center_cf7_enroll_form_id',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'edu_center_sanitize_cf7_form_ref',
+			'transport'         => 'refresh',
+		)
+	);
+
+	$wp_customize->add_control(
+		'edu_center_cf7_enroll_form_id',
+		array(
+			'label'       => esc_html__( 'ID формы CF7', 'edu-center' ),
+			'description' => esc_html__( 'Значение id из шорткода формы, например c41705b или числовой ID поста формы.', 'edu-center' ),
+			'section'     => 'edu_center_enroll_modal_section',
+			'type'        => 'text',
+			'input_attrs' => array(
+				'placeholder' => 'c41705b',
+			),
+		)
+	);
+
+	$wp_customize->add_setting(
+		'edu_center_cf7_enroll_form_title',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+
+	$wp_customize->add_control(
+		'edu_center_cf7_enroll_form_title',
+		array(
+			'label'       => esc_html__( 'Title в шорткоде CF7', 'edu-center' ),
+			'description' => esc_html__( 'Необязательно: атрибут title в [contact-form-7]. Если пусто — «Записаться на курс».', 'edu-center' ),
+			'section'     => 'edu_center_enroll_modal_section',
+			'type'        => 'text',
+		)
+	);
+
 	// Section: Teachers archive page (content for "Дополнительная информация" block)
 	$wp_customize->add_section(
 		'teachers_archive_section',
