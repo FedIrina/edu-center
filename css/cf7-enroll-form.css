@@ -1,0 +1,81 @@
+/**
+ * Стили формы «Записаться на курс» (Contact Form 7 в модальном окне).
+ * Радиокнопки customer-type — в виде кнопок с такими же скруглениями, как у submit.
+ *
+ * В CF7 к тегу радио можно добавить class:customer-type-buttons, например:
+ * [radio customer-type "Физлицо" "Юрлицо" class:customer-type-buttons]
+ * Тогда стили применятся по классу. Без класса — по имени поля (input[name="customer-type"]).
+ */
+
+#course-enroll-modal .customer-type-buttons,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+#course-enroll-modal .customer-type-buttons .wpcf7-list-item,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) .wpcf7-list-item {
+  margin: 0;
+}
+
+#course-enroll-modal .customer-type-buttons label,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) label {
+  display: inline-block;
+  width: 200px;
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  box-sizing: border-box;
+  font-family: var(--bs-body-font-family);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #070F23;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid #000482;
+  border-radius: var(--bs-border-radius-lg);
+  background-color: #fff;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+#course-enroll-modal .customer-type-buttons input[type="radio"],
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) input[name="customer-type"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  /* white-space: nowrap; */
+  border: 0;
+}
+
+#course-enroll-modal .customer-type-buttons label:hover,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) label:hover {
+  background-color: #DFE5F2;
+  border-color: #000482;
+}
+
+#course-enroll-modal .customer-type-buttons label:focus-within,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) label:focus-within {
+  outline: 0;
+}
+
+#course-enroll-modal .customer-type-buttons input[type="radio"]:checked + .wpcf7-list-item-label,
+#course-enroll-modal .customer-type-buttons label:has(input[type="radio"]:checked),
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) input[name="customer-type"]:checked + .wpcf7-list-item-label,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) label:has(input[name="customer-type"]:checked) {
+  color: #070F23;
+  background-color: #DFE5F2;
+  border-color: #DFE5F2;
+}
+
+#course-enroll-modal .customer-type-buttons .wpcf7-list-item-label,
+#course-enroll-modal .wpcf7-form-control-wrap:has(input[name="customer-type"]) .wpcf7-list-item-label {
+  display: block;
+}

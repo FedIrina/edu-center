@@ -1,0 +1,10 @@
+/**
+ * Доп. стили для главной страницы (front-page.php): карточки курсов с раздельными ценами.
+ */
+.courses__amount-group--individual,
+.courses__amount-group--organizations {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+}

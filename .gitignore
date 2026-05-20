@@ -1,0 +1,57 @@
+# OS
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors / IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*~
+*.swp
+*.swo
+
+# Cursor (локальные настройки сессии)
+.cursor/
+
+# PHP / Composer (если появятся)
+/vendor/
+composer.lock
+
+# Node (если появятся сборки)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Секреты и локальная конфигурация
+.env
+.env.*
+!.env.example
+
+# Логи и кэш
+*.log
+.cache/
+.phpunit.result.cache
+
+# Временные и резервные копии
+*.bak
+*.tmp
+*.orig
+
+# Переводы: бэкапы Poedit / WP
+*.po~
+*.pot~
+languages/*.backup.*
+
+# Внутренняя документация темы (не в репозиторий)
+/docs/
+
+# Архивы (часто кладут рядом с темой)
+*.zip
+*.tar
+*.tar.gz
+*.7z
